@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Score Tracker - Public View</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎮 Score Tracker</h1>
+            <p class="subtitle">View player statistics and winnings</p>
+            <div class="header-nav">
+                <a href="admin.html" class="nav-link">Admin Login</a>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <!-- Public Statistics Section -->
+            <section class="display-section card">
+                <h2>📊 Player Statistics</h2>
+                
+                <div class="filter-group">
+                    <label for="filterUser">Filter by Player:</label>
+                    <select id="filterUser" onchange="loadPublicStats()">
+                        <option value="">All Players</option>
+                    </select>
+                    <button onclick="loadPublicStats()" class="btn btn-secondary">Refresh</button>
+                </div>
+
+                <div id="statsDisplay" class="stats-display">
+                    <div id="summaryContent" class="summary-grid"></div>
+                </div>
+
+                <div class="note" style="margin-top: 20px;">
+                    ℹ️ This is a public view showing player statistics. For full access and editing capabilities, please log in as an administrator.
+                </div>
+            </section>
+        </div>
+
+        <footer>
+            <p>Score Tracker © 2026 | Powered by AWS DynamoDB</p>
+        </footer>
+    </div>
+
+    <div id="notification" class="notification"></div>
+
+    <!-- AWS SDK -->
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1563.0.min.js"></script>
+    <script src="public.js"></script>
+</body>
+</html>

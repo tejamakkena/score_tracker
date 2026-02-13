@@ -9,6 +9,31 @@ let config = {
     scoresTable: 'score-tracker-scores'
 };
 
+// Authentication functions
+function isAuthenticated() {
+    const authData = sessionStorage.getItem('adminAuth');
+    if (!authData) return false;
+    
+    const auth = JSON.parse(authData);
+    const now = new Date().getTime();
+    
+    // Check if session is still valid (24 hours)
+    if (now - auth.timestamp > 24 * 60 * 60 * 1000) {
+        sessionStorage.removeItem('adminAuth');
+        return false;
+    }
+    
+    return auth.authenticated === true;
+}
+
+function logout() {
+    sessionStorage.removeItem('adminAuth');
+    // Note: AWS config is kept in localStorage for convenience
+    // Only the authentication session is cleared
+    window.location.href = 'index.html';
+}
+
+
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', function() {
     loadConfigFromStorage();
@@ -27,6 +52,12 @@ function loadConfigFromStorage() {
         document.getElementById('usersTable').value = config.usersTable || 'score-tracker-users';
         document.getElementById('scoresTable').value = config.scoresTable || 'score-tracker-scores';
     }
+    
+    // Load admin password if exists
+    const savedPassword = localStorage.getItem('adminPassword');
+    if (savedPassword && document.getElementById('adminPasswordInput')) {
+        document.getElementById('adminPasswordInput').value = savedPassword;
+    }
 }
 
 // Save configuration
@@ -43,6 +74,13 @@ function saveConfig() {
     }
 
     localStorage.setItem('awsConfig', JSON.stringify(config));
+    
+    // Save admin password if provided
+    const adminPasswordInput = document.getElementById('adminPasswordInput');
+    if (adminPasswordInput && adminPasswordInput.value) {
+        localStorage.setItem('adminPassword', adminPasswordInput.value);
+    }
+    
     initializeAWS();
     showNotification('Configuration saved successfully!', 'success');
     
