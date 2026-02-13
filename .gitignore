@@ -1,0 +1,32 @@
+# IDE and Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Environment variables (if we add them later)
+.env
+.env.local
+
+# Build artifacts
+dist/
+build/
+
+# Node modules (if we add npm in the future)
+node_modules/
+
+# AWS credentials (just in case)
+credentials
+.aws/
