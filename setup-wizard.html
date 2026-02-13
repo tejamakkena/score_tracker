@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Score Tracker - Setup Wizard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="game-theme.css">
+    <style>
+        .wizard-container {
+            max-width: 800px;
+            margin: 50px auto;
+        }
+
+        .step-indicator {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 40px;
+            padding: 0 20px;
+        }
+
+        .step {
+            flex: 1;
+            text-align: center;
+            position: relative;
+            padding: 20px 0;
+        }
+
+        .step::after {
+            content: '';
+            position: absolute;
+            top: 30px;
+            left: 50%;
+            width: 100%;
+            height: 2px;
+            background: rgba(0, 255, 255, 0.2);
+            z-index: -1;
+        }
+
+        .step:last-child::after {
+            display: none;
+        }
+
+        .step-number {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(0, 255, 255, 0.2);
+            border: 2px solid rgba(0, 255, 255, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            transition: all 0.3s;
+        }
+
+        .step.active .step-number {
+            background: rgba(0, 255, 255, 0.4);
+            border-color: var(--primary-neon);
+            box-shadow: var(--glow-md) var(--primary-neon);
+        }
+
+        .step.completed .step-number {
+            background: rgba(0, 255, 0, 0.3);
+            border-color: var(--accent-neon);
+            box-shadow: var(--glow-sm) var(--accent-neon);
+        }
+
+        .step-title {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .step.active .step-title {
+            color: var(--primary-neon);
+            text-shadow: var(--glow-sm) var(--primary-neon);
+        }
+
+        .wizard-content {
+            min-height: 400px;
+        }
+
+        .step-content {
+            display: none;
+        }
+
+        .step-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .wizard-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            gap: 15px;
+        }
+
+        .info-box {
+            background: rgba(0, 255, 255, 0.1);
+            border: 2px solid rgba(0, 255, 255, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .info-box h3 {
+            color: var(--primary-neon);
+            margin-bottom: 15px;
+            text-shadow: var(--glow-sm) var(--primary-neon);
+        }
+
+        .info-box ul {
+            margin-left: 20px;
+            line-height: 1.8;
+        }
+
+        .success-icon {
+            font-size: 5rem;
+            text-align: center;
+            margin: 30px 0;
+            animation: bounce 1s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .credential-display {
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid rgba(0, 255, 255, 0.3);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎮 Score Tracker Setup Wizard</h1>
+            <p class="subtitle">One-time configuration for your score tracking system</p>
+        </header>
+
+        <div class="wizard-container">
+            <div class="card">
+                <!-- Step Indicator -->
+                <div class="step-indicator">
+                    <div class="step active" id="step-indicator-1">
+                        <div class="step-number">1</div>
+                        <div class="step-title">Welcome</div>
+                    </div>
+                    <div class="step" id="step-indicator-2">
+                        <div class="step-number">2</div>
+                        <div class="step-title">AWS Setup</div>
+                    </div>
+                    <div class="step" id="step-indicator-3">
+                        <div class="step-number">3</div>
+                        <div class="step-title">Admin Password</div>
+                    </div>
+                    <div class="step" id="step-indicator-4">
+                        <div class="step-number">4</div>
+                        <div class="step-title">Public Access</div>
+                    </div>
+                    <div class="step" id="step-indicator-5">
+                        <div class="step-number">5</div>
+                        <div class="step-title">Complete</div>
+                    </div>
+                </div>
+
+                <!-- Wizard Content -->
+                <div class="wizard-content">
+                    <!-- Step 1: Welcome -->
+                    <div class="step-content active" id="step-1">
+                        <h2>🎉 Welcome to Score Tracker!</h2>
+                        <div class="info-box">
+                            <h3>What you'll need:</h3>
+                            <ul>
+                                <li>AWS Account with DynamoDB access</li>
+                                <li>Two DynamoDB tables created (users and scores)</li>
+                                <li>AWS IAM credentials (Access Key and Secret Key)</li>
+                                <li>5-10 minutes to complete setup</li>
+                            </ul>
+                        </div>
+                        <div class="info-box">
+                            <h3>What this wizard will do:</h3>
+                            <ul>
+                                <li>Configure your AWS credentials (stored locally in browser)</li>
+                                <li>Set up your admin password for secure access</li>
+                                <li>Optionally configure public read-only access</li>
+                                <li>Verify your setup works correctly</li>
+                            </ul>
+                        </div>
+                        <p><strong>Note:</strong> All credentials are stored locally in your browser and never sent to any server except AWS.</p>
+                    </div>
+
+                    <!-- Step 2: AWS Setup -->
+                    <div class="step-content" id="step-2">
+                        <h2>☁️ AWS Configuration</h2>
+                        <p>Enter your AWS credentials for the admin account (full read/write access):</p>
+                        
+                        <div class="form-group">
+                            <label for="wizardRegion">AWS Region:</label>
+                            <input type="text" id="wizardRegion" placeholder="us-east-1" value="us-east-1">
+                            <small style="color: var(--text-light);">The AWS region where your DynamoDB tables are located</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="wizardAccessKey">Admin Access Key ID:</label>
+                            <input type="text" id="wizardAccessKey" placeholder="AKIAIOSFODNN7EXAMPLE">
+                            <small style="color: var(--text-light);">Your AWS IAM admin user's access key</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="wizardSecretKey">Admin Secret Access Key:</label>
+                            <input type="password" id="wizardSecretKey" placeholder="wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY">
+                            <small style="color: var(--text-light);">Your AWS IAM admin user's secret key</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="wizardUsersTable">Users Table Name:</label>
+                            <input type="text" id="wizardUsersTable" placeholder="score-tracker-users" value="score-tracker-users">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="wizardScoresTable">Scores Table Name:</label>
+                            <input type="text" id="wizardScoresTable" placeholder="score-tracker-scores" value="score-tracker-scores">
+                        </div>
+
+                        <div class="info-box">
+                            <h3>⚠️ Security Note:</h3>
+                            <p>These credentials are stored locally in your browser's localStorage and are only sent to AWS services. They are never transmitted to any other server.</p>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Admin Password -->
+                    <div class="step-content" id="step-3">
+                        <h2>🔐 Admin Password Setup</h2>
+                        <p>Create a strong password for admin access to the Score Tracker dashboard:</p>
+                        
+                        <div class="form-group">
+                            <label for="wizardAdminPassword">Admin Password:</label>
+                            <input type="password" id="wizardAdminPassword" placeholder="Enter a strong password">
+                            <small style="color: var(--text-light);">Minimum 8 characters recommended</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="wizardAdminPasswordConfirm">Confirm Password:</label>
+                            <input type="password" id="wizardAdminPasswordConfirm" placeholder="Re-enter your password">
+                        </div>
+
+                        <div class="info-box">
+                            <h3>💡 Password Tips:</h3>
+                            <ul>
+                                <li>Use a mix of uppercase, lowercase, numbers, and symbols</li>
+                                <li>Avoid common words or personal information</li>
+                                <li>Make it at least 12 characters long</li>
+                                <li>Consider using a password manager</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Step 4: Public Access -->
+                    <div class="step-content" id="step-4">
+                        <h2>👥 Public Access Configuration (Optional)</h2>
+                        <p>Configure read-only public access to allow anyone to view statistics without logging in:</p>
+                        
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="enablePublicAccess"> Enable Public View
+                            </label>
+                            <small style="display: block; margin-top: 10px; color: var(--text-light);">
+                                If enabled, you'll need to provide read-only AWS credentials
+                            </small>
+                        </div>
+
+                        <div id="publicAccessFields" style="display: none;">
+                            <div class="form-group">
+                                <label for="wizardPublicAccessKey">Public Read-Only Access Key ID:</label>
+                                <input type="text" id="wizardPublicAccessKey" placeholder="AKIAIOSFODNN7EXAMPLE">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="wizardPublicSecretKey">Public Read-Only Secret Key:</label>
+                                <input type="password" id="wizardPublicSecretKey" placeholder="wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY">
+                            </div>
+                        </div>
+
+                        <div class="info-box">
+                            <h3>ℹ️ About Public Access:</h3>
+                            <ul>
+                                <li>Public view shows aggregated statistics only (no editing)</li>
+                                <li>Requires a separate IAM user with read-only permissions</li>
+                                <li>Read-only credentials can be safely exposed in source code</li>
+                                <li>You can skip this step and enable it later</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Step 5: Complete -->
+                    <div class="step-content" id="step-5">
+                        <div class="success-icon">🎉</div>
+                        <h2 style="text-align: center;">Setup Complete!</h2>
+                        <p style="text-align: center; font-size: 1.2rem; margin: 20px 0;">
+                            Your Score Tracker is now configured and ready to use!
+                        </p>
+
+                        <div class="info-box">
+                            <h3>✅ Configuration Summary:</h3>
+                            <div id="configSummary"></div>
+                        </div>
+
+                        <div class="info-box">
+                            <h3>🚀 Next Steps:</h3>
+                            <ul>
+                                <li>Click "Go to Admin Panel" to start managing users and scores</li>
+                                <li>Add your first users through the User Management section</li>
+                                <li>Start recording game scores and track winnings</li>
+                                <li>Share the public view URL with players (if enabled)</li>
+                            </ul>
+                        </div>
+
+                        <div class="info-box">
+                            <h3>📱 Access from Anywhere:</h3>
+                            <ul>
+                                <li><strong>Admin Panel:</strong> <span class="credential-display" id="adminUrl"></span></li>
+                                <li><strong>Public View:</strong> <span class="credential-display" id="publicUrl"></span></li>
+                                <li>Bookmark these URLs for easy access from any device</li>
+                            </ul>
+                        </div>
+
+                        <div class="btn-group" style="justify-content: center; margin-top: 30px;">
+                            <button onclick="goToAdmin()" class="btn btn-primary">Go to Admin Panel</button>
+                            <button onclick="goToPublic()" class="btn btn-secondary">View Public Page</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Navigation Buttons -->
+                <div class="wizard-buttons">
+                    <button onclick="previousStep()" id="prevBtn" class="btn btn-secondary" style="display: none;">Previous</button>
+                    <div style="flex: 1;"></div>
+                    <button onclick="nextStep()" id="nextBtn" class="btn btn-primary">Next</button>
+                    <button onclick="skipWizard()" id="skipBtn" class="btn btn-secondary">Skip Wizard</button>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>Score Tracker © 2026 | Powered by AWS DynamoDB</p>
+        </footer>
+    </div>
+
+    <div id="notification" class="notification"></div>
+
+    <script>
+        let currentStep = 1;
+        const totalSteps = 5;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if already configured
+            const existingConfig = localStorage.getItem('awsConfig');
+            if (existingConfig) {
+                if (confirm('Setup has already been completed. Do you want to reconfigure?')) {
+                    // Continue with wizard
+                } else {
+                    window.location.href = 'admin.html';
+                }
+            }
+
+            // Toggle public access fields
+            document.getElementById('enablePublicAccess').addEventListener('change', function(e) {
+                document.getElementById('publicAccessFields').style.display = 
+                    e.target.checked ? 'block' : 'none';
+            });
+        });
+
+        function updateStepIndicator() {
+            for (let i = 1; i <= totalSteps; i++) {
+                const indicator = document.getElementById(`step-indicator-${i}`);
+                indicator.classList.remove('active', 'completed');
+                
+                if (i < currentStep) {
+                    indicator.classList.add('completed');
+                } else if (i === currentStep) {
+                    indicator.classList.add('active');
+                }
+            }
+        }
+
+        function showStep(step) {
+            // Hide all steps
+            document.querySelectorAll('.step-content').forEach(el => {
+                el.classList.remove('active');
+            });
+            
+            // Show current step
+            document.getElementById(`step-${step}`).classList.add('active');
+            
+            // Update buttons
+            document.getElementById('prevBtn').style.display = step === 1 ? 'none' : 'block';
+            document.getElementById('skipBtn').style.display = step === totalSteps ? 'none' : 'block';
+            
+            if (step === totalSteps) {
+                document.getElementById('nextBtn').style.display = 'none';
+            } else {
+                document.getElementById('nextBtn').style.display = 'block';
+                document.getElementById('nextBtn').textContent = step === totalSteps - 1 ? 'Finish' : 'Next';
+            }
+            
+            updateStepIndicator();
+        }
+
+        function validateStep(step) {
+            if (step === 2) {
+                const region = document.getElementById('wizardRegion').value.trim();
+                const accessKey = document.getElementById('wizardAccessKey').value.trim();
+                const secretKey = document.getElementById('wizardSecretKey').value.trim();
+                
+                if (!region || !accessKey || !secretKey) {
+                    showNotification('Please fill in all AWS credentials', 'error');
+                    return false;
+                }
+            } else if (step === 3) {
+                const password = document.getElementById('wizardAdminPassword').value;
+                const confirm = document.getElementById('wizardAdminPasswordConfirm').value;
+                
+                if (!password) {
+                    showNotification('Please enter an admin password', 'error');
+                    return false;
+                }
+                
+                if (password !== confirm) {
+                    showNotification('Passwords do not match', 'error');
+                    return false;
+                }
+                
+                if (password.length < 8) {
+                    showNotification('Password should be at least 8 characters', 'error');
+                    return false;
+                }
+            } else if (step === 4) {
+                const enablePublic = document.getElementById('enablePublicAccess').checked;
+                if (enablePublic) {
+                    const publicAccessKey = document.getElementById('wizardPublicAccessKey').value.trim();
+                    const publicSecretKey = document.getElementById('wizardPublicSecretKey').value.trim();
+                    
+                    if (!publicAccessKey || !publicSecretKey) {
+                        showNotification('Please provide read-only credentials or disable public access', 'error');
+                        return false;
+                    }
+                }
+            }
+            
+            return true;
+        }
+
+        function nextStep() {
+            if (!validateStep(currentStep)) {
+                return;
+            }
+            
+            if (currentStep === totalSteps - 1) {
+                // Save configuration
+                saveConfiguration();
+            }
+            
+            if (currentStep < totalSteps) {
+                currentStep++;
+                showStep(currentStep);
+            }
+        }
+
+        function previousStep() {
+            if (currentStep > 1) {
+                currentStep--;
+                showStep(currentStep);
+            }
+        }
+
+        function saveConfiguration() {
+            const config = {
+                region: document.getElementById('wizardRegion').value.trim(),
+                accessKeyId: document.getElementById('wizardAccessKey').value.trim(),
+                secretAccessKey: document.getElementById('wizardSecretKey').value.trim(),
+                usersTable: document.getElementById('wizardUsersTable').value.trim(),
+                scoresTable: document.getElementById('wizardScoresTable').value.trim()
+            };
+            
+            const adminPassword = document.getElementById('wizardAdminPassword').value;
+            
+            // Save admin configuration
+            localStorage.setItem('awsConfig', JSON.stringify(config));
+            localStorage.setItem('adminPassword', adminPassword);
+            
+            // Save public configuration if enabled
+            const enablePublic = document.getElementById('enablePublicAccess').checked;
+            if (enablePublic) {
+                const publicConfig = {
+                    region: config.region,
+                    accessKeyId: document.getElementById('wizardPublicAccessKey').value.trim(),
+                    secretAccessKey: document.getElementById('wizardPublicSecretKey').value.trim(),
+                    usersTable: config.usersTable,
+                    scoresTable: config.scoresTable
+                };
+                localStorage.setItem('publicAwsConfig', JSON.stringify(publicConfig));
+            }
+            
+            // Display summary
+            const summary = `
+                <p><strong>AWS Region:</strong> ${config.region}</p>
+                <p><strong>Users Table:</strong> ${config.usersTable}</p>
+                <p><strong>Scores Table:</strong> ${config.scoresTable}</p>
+                <p><strong>Public Access:</strong> ${enablePublic ? 'Enabled' : 'Disabled'}</p>
+                <p><strong>Admin Password:</strong> Set ✓</p>
+            `;
+            document.getElementById('configSummary').innerHTML = summary;
+            
+            // Display URLs
+            const baseUrl = window.location.origin + window.location.pathname.replace('setup-wizard.html', '');
+            document.getElementById('adminUrl').textContent = baseUrl + 'index.html';
+            document.getElementById('publicUrl').textContent = baseUrl + 'public.html';
+            
+            showNotification('Configuration saved successfully!', 'success');
+        }
+
+        function skipWizard() {
+            if (confirm('Are you sure you want to skip the setup wizard? You will need to configure manually.')) {
+                window.location.href = 'index.html';
+            }
+        }
+
+        function goToAdmin() {
+            window.location.href = 'index.html';
+        }
+
+        function goToPublic() {
+            window.location.href = 'public.html';
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = `notification ${type} show`;
+
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

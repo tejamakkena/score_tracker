@@ -1,35 +1,96 @@
 # Score Tracker 🎮
 
-A GitHub Pages-based web application for tracking game scores and amounts won per player. Data is stored in AWS DynamoDB.
+A modern, GitHub Pages-based web application for tracking game scores and amounts won per player. Features a futuristic gaming UI with neon aesthetics and secure cloud storage via AWS DynamoDB.
 
-## Features
+## ✨ Features
 
-- ✅ **Public View** - Read-only access to player statistics and winnings
-- ✅ **Admin Panel** - Secure admin access with password protection
+### 🎨 Modern Gaming UI
+- 🎮 **Futuristic Design** - Neon colors, animations, and gaming-inspired aesthetics
+- 📱 **Fully Responsive** - Works perfectly on phones, tablets, and desktops
+- 🌙 **Dark Theme** - Easy on the eyes with cyberpunk-style visuals
+- ⚡ **Smooth Animations** - Engaging user experience with fluid transitions
+
+### 🔐 Secure Access
+- 🔒 **Password-Protected Admin Panel** - Secure administrative access
+- 👥 **Public View** - Optional read-only access for viewing statistics
+- 🔑 **One-Time Setup** - Configure AWS credentials once per device
+- 🌍 **Access from Anywhere** - Use from any device with internet
+
+### 📊 Score Management
 - ✅ User management (add and view users)
 - ✅ Score entry interface (record game name, score, amount won, and date)
 - ✅ Score history with filtering by user
 - ✅ Summary statistics (total games, total/average/best winnings)
-- ✅ Responsive design that works on desktop and mobile
-- ✅ Secure credential management with read-only and admin access levels
 - ✅ Real-time data sync with DynamoDB
+
+### ⚙️ Easy Setup
+- 🧙 **Setup Wizard** - Guided one-time configuration
+- 📖 **Comprehensive Documentation** - Step-by-step guides
+- ☁️ **Cloud Storage** - Reliable AWS DynamoDB backend
+- 🚀 **GitHub Pages Hosting** - Free, reliable hosting
+
+## 🚀 Quick Start
+
+### For First-Time Users
+
+1. **Visit the Setup Wizard:** [setup-wizard.html](setup-wizard.html)
+2. **Follow the 5-step guide:**
+   - Welcome & Prerequisites
+   - AWS Configuration
+   - Admin Password Setup
+   - Public Access (Optional)
+   - Complete Setup
+3. **Start tracking scores!**
+
+### For Detailed Instructions
+
+See [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md) for comprehensive deployment instructions.
 
 ## Live Demo
 
 Once deployed to GitHub Pages, access the application at:
-`https://tejamakkena.github.io/score_tracker/`
+`https://YOUR-USERNAME.github.io/score_tracker/`
 
-## New Security Features
+**Example URLs:**
+- **Admin Login:** `https://YOUR-USERNAME.github.io/score_tracker/`
+- **Setup Wizard:** `https://YOUR-USERNAME.github.io/score_tracker/setup-wizard.html`
+- **Public View:** `https://YOUR-USERNAME.github.io/score_tracker/public.html`
 
-This application now supports:
-- **Separate access levels**: Public view (read-only) and Admin panel (full access)
-- **Admin authentication**: Password-protected admin panel
-- **IAM-based security**: Separate AWS credentials for public and admin access
-- **Session management**: Admin sessions expire after 24 hours
+## 📱 Access from Any Device
 
-See [PUBLIC_VIEW_SETUP.md](PUBLIC_VIEW_SETUP.md) for detailed configuration instructions.
+Score Tracker works seamlessly across all devices:
+
+- ✅ **Desktop** - Full features on Chrome, Firefox, Safari, Edge
+- ✅ **Mobile** - iPhone, Android phones (fully responsive)
+- ✅ **Tablet** - iPad, Android tablets
+- ✅ **Multiple Devices** - Run setup wizard on each device for quick access
+
+**Tips:**
+- Bookmark URLs for quick access
+- Add to home screen on mobile for app-like experience
+- Credentials stored locally per device (secure and private)
 
 ## Setup Instructions
+
+### Quick Setup (Recommended)
+
+1. **Enable GitHub Pages** (if not already done)
+   - Go to repository Settings → Pages
+   - Select your main branch
+   - Save
+
+2. **Run Setup Wizard**
+   - Visit: `https://YOUR-USERNAME.github.io/score_tracker/setup-wizard.html`
+   - Follow the 5-step wizard
+   - Configuration saved locally in your browser
+
+3. **Start Using**
+   - Login with your admin password
+   - Add users and record scores
+
+### Manual Setup
+
+See detailed instructions in [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md).
 
 ### 1. AWS DynamoDB Setup
 
@@ -152,35 +213,34 @@ Click the "Logout" button in the header to end your admin session
 
 ## Security Considerations
 
-⚠️ **Important Security Notes**:
-
 ### Current Implementation
 
-- **Admin Authentication**: Simple password-based authentication stored in localStorage
-- **Session Management**: Admin sessions expire after 24 hours
-- **AWS Credentials**: Two separate IAM users recommended:
-  - **Public/Read-Only**: Only `GetItem`, `Scan`, `Query` permissions on DynamoDB
-  - **Admin**: Full DynamoDB permissions (`PutItem`, `GetItem`, `Scan`, `Query`, `UpdateItem`, `DeleteItem`)
-- **Data Exposure**: Public view credentials are visible in source code (acceptable for public data)
+✅ **Client-Side Authentication**
+- Password-protected admin panel with sessionStorage
+- Sessions expire after 24 hours
+- Default password: `admin123` (MUST be changed immediately)
 
-### Security Limitations
+✅ **AWS Credential Separation**
+- **Admin credentials:** Full DynamoDB access (stored locally)
+- **Public credentials:** Read-only access (safe to expose)
 
-- This is a client-side only application with basic security
-- Admin password is stored in browser localStorage (client-side)
-- AWS credentials are exposed in the frontend code
-- No server-side validation or authentication
+✅ **Local Storage Security**
+- Credentials stored in browser localStorage
+- Never transmitted except to AWS services
+- Accessible only on configured devices
 
-### Recommended for Production
+### Production Security Upgrade
 
-**For production use**, consider implementing:
-- **AWS Cognito** for user authentication and authorization
-- **API Gateway + Lambda** for backend operations
-- **No client-side credentials** - All AWS operations via secure backend
-- **AWS Amplify** for a more secure and scalable architecture
-- **Environment-specific credential management**
-- **Multi-factor authentication (MFA)** for admin access
-- **Audit logging** of all admin actions
-- **Rate limiting** to prevent abuse
+For production deployment with multiple admin users, we recommend AWS Cognito:
+
+**Benefits:**
+- ✅ Multi-user authentication
+- ✅ User pools and groups
+- ✅ Multi-factor authentication (MFA)
+- ✅ Password policies and recovery
+- ✅ Social login integration
+
+**See:** [COGNITO_INTEGRATION.md](COGNITO_INTEGRATION.md) for complete integration guide.
 
 ### Best Practices
 
