@@ -153,7 +153,9 @@
             // Get the admin password from localStorage (set during configuration)
             const storedPassword = localStorage.getItem('adminPassword');
             
-            // Default password if none is set (CHANGE THIS IN PRODUCTION!)
+            // Default password if none is set
+            // SECURITY WARNING: Change this password immediately after first login!
+            // Go to Admin Panel > AWS Configuration > Admin Password to set a secure password
             const defaultPassword = 'admin123';
             const correctPassword = storedPassword || defaultPassword;
             
@@ -165,11 +167,18 @@
                 };
                 sessionStorage.setItem('adminAuth', JSON.stringify(authData));
                 
-                showNotification('Login successful! Redirecting...', 'success');
-                
-                setTimeout(() => {
-                    window.location.href = 'admin.html';
-                }, 1000);
+                // Show warning if using default password
+                if (correctPassword === 'admin123') {
+                    showNotification('⚠️ Using default password! Please change it in AWS Configuration.', 'info');
+                    setTimeout(() => {
+                        window.location.href = 'admin.html';
+                    }, 2000);
+                } else {
+                    showNotification('Login successful! Redirecting...', 'success');
+                    setTimeout(() => {
+                        window.location.href = 'admin.html';
+                    }, 1000);
+                }
             } else {
                 showNotification('Invalid password. Please try again.', 'error');
                 document.getElementById('adminPassword').value = '';

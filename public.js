@@ -2,8 +2,10 @@
 let docClient = null;
 let config = {
     region: 'us-east-1',
-    accessKeyId: '', // Public read-only credentials
-    secretAccessKey: '', // Public read-only credentials
+    // Public read-only credentials - Configure these using the instructions in PUBLIC_VIEW_SETUP.md
+    // These credentials should only have DynamoDB read permissions (GetItem, Scan, Query)
+    accessKeyId: '',
+    secretAccessKey: '',
     usersTable: 'score-tracker-users',
     scoresTable: 'score-tracker-scores'
 };

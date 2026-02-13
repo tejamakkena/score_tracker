@@ -28,7 +28,8 @@ function isAuthenticated() {
 
 function logout() {
     sessionStorage.removeItem('adminAuth');
-    localStorage.removeItem('awsConfig');
+    // Note: AWS config is kept in localStorage for convenience
+    // Only the authentication session is cleared
     window.location.href = 'index.html';
 }
 
@@ -75,9 +76,9 @@ function saveConfig() {
     localStorage.setItem('awsConfig', JSON.stringify(config));
     
     // Save admin password if provided
-    const adminPassword = document.getElementById('adminPasswordInput').value;
-    if (adminPassword) {
-        localStorage.setItem('adminPassword', adminPassword);
+    const adminPasswordInput = document.getElementById('adminPasswordInput');
+    if (adminPasswordInput && adminPasswordInput.value) {
+        localStorage.setItem('adminPassword', adminPasswordInput.value);
     }
     
     initializeAWS();
