@@ -3,8 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Score Tracker</title>
+    <title>Score Tracker - Login</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        .login-container {
+            max-width: 500px;
+            margin: 100px auto;
+        }
+        
+        .login-card {
+            background: white;
+            border-radius: 10px;
+            padding: 40px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .login-header h2 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .login-options {
+            display: grid;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .option-card {
+            padding: 20px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .option-card:hover {
+            border-color: #667eea;
+            background: #f8f9fa;
+            transform: translateY(-2px);
+        }
+        
+        .option-card h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .option-card p {
+            color: #666;
+            font-size: 0.9rem;
+            margin: 0;
+        }
+        
+        .divider {
+            text-align: center;
+            margin: 20px 0;
+            color: #999;
+            position: relative;
+        }
+        
+        .divider::before,
+        .divider::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 40%;
+            height: 1px;
+            background: #ddd;
+        }
+        
+        .divider::before {
+            left: 0;
+        }
+        
+        .divider::after {
+            right: 0;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -13,113 +93,34 @@
             <p class="subtitle">Track your game scores and winnings</p>
         </header>
 
-        <div class="main-content">
-            <!-- Configuration Section -->
-            <section class="config-section card">
-                <h2>⚙️ AWS Configuration</h2>
-                <div class="form-group">
-                    <label for="region">AWS Region:</label>
-                    <input type="text" id="region" placeholder="us-east-1" value="us-east-1">
-                </div>
-                <div class="form-group">
-                    <label for="accessKeyId">Access Key ID:</label>
-                    <input type="text" id="accessKeyId" placeholder="Your AWS Access Key ID">
-                </div>
-                <div class="form-group">
-                    <label for="secretAccessKey">Secret Access Key:</label>
-                    <input type="password" id="secretAccessKey" placeholder="Your AWS Secret Access Key">
-                </div>
-                <div class="form-group">
-                    <label for="usersTable">Users Table Name:</label>
-                    <input type="text" id="usersTable" placeholder="score-tracker-users" value="score-tracker-users">
-                </div>
-                <div class="form-group">
-                    <label for="scoresTable">Scores Table Name:</label>
-                    <input type="text" id="scoresTable" placeholder="score-tracker-scores" value="score-tracker-scores">
-                </div>
-                <button onclick="saveConfig()" class="btn btn-primary">Save Configuration</button>
-                <p class="note">⚠️ Note: Credentials are stored locally in your browser and never sent to any server except AWS.</p>
-            </section>
-
-            <!-- User Management Section -->
-            <section class="user-section card">
-                <h2>👤 User Management</h2>
-                <div class="form-group">
-                    <label for="userName">User Name:</label>
-                    <input type="text" id="userName" placeholder="Enter user name">
-                </div>
-                <div class="form-group">
-                    <label for="userEmail">Email (Optional):</label>
-                    <input type="email" id="userEmail" placeholder="user@example.com">
-                </div>
-                <button onclick="addUser()" class="btn btn-primary">Add User</button>
-                <button onclick="loadUsers()" class="btn btn-secondary">Refresh Users</button>
-                
-                <div id="usersList" class="users-list">
-                    <h3>Registered Users</h3>
-                    <ul id="usersContainer"></ul>
-                </div>
-            </section>
-
-            <!-- Score Entry Section -->
-            <section class="score-section card">
-                <h2>📊 Enter Score</h2>
-                <div class="form-group">
-                    <label for="scoreUser">Select User:</label>
-                    <select id="scoreUser">
-                        <option value="">-- Select User --</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="gameName">Game Name:</label>
-                    <input type="text" id="gameName" placeholder="e.g., Poker, Chess, etc.">
-                </div>
-                <div class="form-group">
-                    <label for="scoreValue">Score:</label>
-                    <input type="number" id="scoreValue" placeholder="0">
-                </div>
-                <div class="form-group">
-                    <label for="amountWon">Amount Won:</label>
-                    <input type="number" id="amountWon" placeholder="0.00" step="0.01">
-                </div>
-                <div class="form-group">
-                    <label for="gameDate">Date:</label>
-                    <input type="date" id="gameDate">
-                </div>
-                <button onclick="addScore()" class="btn btn-primary">Submit Score</button>
-            </section>
-
-            <!-- Scores Display Section -->
-            <section class="display-section card">
-                <h2>📈 Score History</h2>
-                <div class="filter-group">
-                    <label for="filterUser">Filter by User:</label>
-                    <select id="filterUser" onchange="loadScores()">
-                        <option value="">All Users</option>
-                    </select>
-                    <button onclick="loadScores()" class="btn btn-secondary">Refresh</button>
-                </div>
-                
-                <div id="scoresDisplay" class="scores-display">
-                    <table id="scoresTable">
-                        <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>User</th>
-                                <th>Game</th>
-                                <th>Score</th>
-                                <th>Amount Won</th>
-                            </tr>
-                        </thead>
-                        <tbody id="scoresTableBody"></tbody>
-                    </table>
+        <div class="login-container">
+            <div class="login-card">
+                <div class="login-header">
+                    <h2>🔐 Admin Login</h2>
+                    <p>Enter your admin password to access the dashboard</p>
                 </div>
 
-                <div id="summary" class="summary">
-                    <h3>Summary</h3>
-                    <div id="summaryContent"></div>
+                <form id="loginForm" onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label for="adminPassword">Admin Password:</label>
+                        <input type="password" id="adminPassword" placeholder="Enter admin password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%; margin: 0;">Login</button>
+                </form>
+
+                <div class="divider">OR</div>
+
+                <div class="login-options">
+                    <div class="option-card" onclick="window.location.href='public.html'">
+                        <h3>👥 Public View</h3>
+                        <p>View player statistics and winnings (read-only)</p>
+                    </div>
                 </div>
-            </section>
+
+                <div class="note" style="margin-top: 20px;">
+                    ℹ️ Contact your administrator if you need access credentials.
+                </div>
+            </div>
         </div>
 
         <footer>
@@ -129,8 +130,61 @@
 
     <div id="notification" class="notification"></div>
 
-    <!-- AWS SDK -->
-    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1563.0.min.js"></script>
-    <script src="app.js"></script>
+    <script>
+        // Check if already authenticated
+        document.addEventListener('DOMContentLoaded', function() {
+            const authData = sessionStorage.getItem('adminAuth');
+            if (authData) {
+                const auth = JSON.parse(authData);
+                const now = new Date().getTime();
+                
+                // Check if session is still valid (24 hours)
+                if (now - auth.timestamp <= 24 * 60 * 60 * 1000 && auth.authenticated === true) {
+                    window.location.href = 'admin.html';
+                }
+            }
+        });
+
+        function handleLogin(event) {
+            event.preventDefault();
+            
+            const password = document.getElementById('adminPassword').value;
+            
+            // Get the admin password from localStorage (set during configuration)
+            const storedPassword = localStorage.getItem('adminPassword');
+            
+            // Default password if none is set (CHANGE THIS IN PRODUCTION!)
+            const defaultPassword = 'admin123';
+            const correctPassword = storedPassword || defaultPassword;
+            
+            if (password === correctPassword) {
+                // Set authentication in sessionStorage
+                const authData = {
+                    authenticated: true,
+                    timestamp: new Date().getTime()
+                };
+                sessionStorage.setItem('adminAuth', JSON.stringify(authData));
+                
+                showNotification('Login successful! Redirecting...', 'success');
+                
+                setTimeout(() => {
+                    window.location.href = 'admin.html';
+                }, 1000);
+            } else {
+                showNotification('Invalid password. Please try again.', 'error');
+                document.getElementById('adminPassword').value = '';
+            }
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = `notification ${type} show`;
+
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+    </script>
 </body>
 </html>
