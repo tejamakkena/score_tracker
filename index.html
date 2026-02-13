@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Score Tracker</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎮 Score Tracker</h1>
+            <p class="subtitle">Track your game scores and winnings</p>
+        </header>
+
+        <div class="main-content">
+            <!-- Configuration Section -->
+            <section class="config-section card">
+                <h2>⚙️ AWS Configuration</h2>
+                <div class="form-group">
+                    <label for="region">AWS Region:</label>
+                    <input type="text" id="region" placeholder="us-east-1" value="us-east-1">
+                </div>
+                <div class="form-group">
+                    <label for="accessKeyId">Access Key ID:</label>
+                    <input type="text" id="accessKeyId" placeholder="Your AWS Access Key ID">
+                </div>
+                <div class="form-group">
+                    <label for="secretAccessKey">Secret Access Key:</label>
+                    <input type="password" id="secretAccessKey" placeholder="Your AWS Secret Access Key">
+                </div>
+                <div class="form-group">
+                    <label for="usersTable">Users Table Name:</label>
+                    <input type="text" id="usersTable" placeholder="score-tracker-users" value="score-tracker-users">
+                </div>
+                <div class="form-group">
+                    <label for="scoresTable">Scores Table Name:</label>
+                    <input type="text" id="scoresTable" placeholder="score-tracker-scores" value="score-tracker-scores">
+                </div>
+                <button onclick="saveConfig()" class="btn btn-primary">Save Configuration</button>
+                <p class="note">⚠️ Note: Credentials are stored locally in your browser and never sent to any server except AWS.</p>
+            </section>
+
+            <!-- User Management Section -->
+            <section class="user-section card">
+                <h2>👤 User Management</h2>
+                <div class="form-group">
+                    <label for="userName">User Name:</label>
+                    <input type="text" id="userName" placeholder="Enter user name">
+                </div>
+                <div class="form-group">
+                    <label for="userEmail">Email (Optional):</label>
+                    <input type="email" id="userEmail" placeholder="user@example.com">
+                </div>
+                <button onclick="addUser()" class="btn btn-primary">Add User</button>
+                <button onclick="loadUsers()" class="btn btn-secondary">Refresh Users</button>
+                
+                <div id="usersList" class="users-list">
+                    <h3>Registered Users</h3>
+                    <ul id="usersContainer"></ul>
+                </div>
+            </section>
+
+            <!-- Score Entry Section -->
+            <section class="score-section card">
+                <h2>📊 Enter Score</h2>
+                <div class="form-group">
+                    <label for="scoreUser">Select User:</label>
+                    <select id="scoreUser">
+                        <option value="">-- Select User --</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="gameName">Game Name:</label>
+                    <input type="text" id="gameName" placeholder="e.g., Poker, Chess, etc.">
+                </div>
+                <div class="form-group">
+                    <label for="scoreValue">Score:</label>
+                    <input type="number" id="scoreValue" placeholder="0">
+                </div>
+                <div class="form-group">
+                    <label for="amountWon">Amount Won:</label>
+                    <input type="number" id="amountWon" placeholder="0.00" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label for="gameDate">Date:</label>
+                    <input type="date" id="gameDate">
+                </div>
+                <button onclick="addScore()" class="btn btn-primary">Submit Score</button>
+            </section>
+
+            <!-- Scores Display Section -->
+            <section class="display-section card">
+                <h2>📈 Score History</h2>
+                <div class="filter-group">
+                    <label for="filterUser">Filter by User:</label>
+                    <select id="filterUser" onchange="loadScores()">
+                        <option value="">All Users</option>
+                    </select>
+                    <button onclick="loadScores()" class="btn btn-secondary">Refresh</button>
+                </div>
+                
+                <div id="scoresDisplay" class="scores-display">
+                    <table id="scoresTable">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>User</th>
+                                <th>Game</th>
+                                <th>Score</th>
+                                <th>Amount Won</th>
+                            </tr>
+                        </thead>
+                        <tbody id="scoresTableBody"></tbody>
+                    </table>
+                </div>
+
+                <div id="summary" class="summary">
+                    <h3>Summary</h3>
+                    <div id="summaryContent"></div>
+                </div>
+            </section>
+        </div>
+
+        <footer>
+            <p>Score Tracker © 2026 | Powered by AWS DynamoDB</p>
+        </footer>
+    </div>
+
+    <div id="notification" class="notification"></div>
+
+    <!-- AWS SDK -->
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1563.0.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
